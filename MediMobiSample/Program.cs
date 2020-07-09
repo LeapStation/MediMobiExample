@@ -63,16 +63,27 @@ namespace MediMobiSample
                 Name = "Wachtzaal Orthopedie",
                 Alias = new []{"Route 37"},
                 PartOf = new ResourceReference("#campus"),
+                Contained = new List<Resource>{campus}
+            };
+
+            var healthcareService = new HealthcareService()
+            {
+                Id = "healthcareService",
+                Identifier =
+                    new List<Identifier> {new Identifier("http://demohospital.mediligo.com/service", "orthopedics")},
+                Specialty = new List<CodeableConcept> {new CodeableConcept("http://snomed.info/sct", "394801008")},
+                Name = "Orthopedie"
             };
 
             var x = new Appointment
             {
+                Id = "example",
                 Contained = new List<Resource>
                 {
-                    patient,location 
+                    patient,location, healthcareService
                 },
                 Identifier =
-                    new List<Identifier> {new Identifier("http://demohospital.mediligo.com/appointemnt", "1234")},
+                    new List<Identifier> {new Identifier("http://demohospital.mediligo.com/appointement", "1234")},
                 Status = Appointment.AppointmentStatus.Booked,
                 ServiceCategory = new List<CodeableConcept>
                 {
@@ -80,13 +91,13 @@ namespace MediMobiSample
                     new CodeableConcept("http://mediligo.com/fhir/MediMobi/CodeSystem/medimobi-appointment-class",
                         "consultation-mobile")
                 },
-                Specialty = new List<CodeableConcept> {new CodeableConcept("http://snomed.info/sct", "394801008")},
                 Start = new DateTimeOffset(2020, 10, 24, 10, 0, 0, TimeSpan.FromHours(1)),
                 End = new DateTimeOffset(2020, 10, 24, 11, 0, 0, TimeSpan.FromHours(1)),
                 Participant = new List<Appointment.ParticipantComponent>
                 {
-                    new Appointment.ParticipantComponent {Actor = new ResourceReference("#patient"),},
-                    new Appointment.ParticipantComponent {Actor = new ResourceReference("#location"),}
+                    new Appointment.ParticipantComponent {Actor = new ResourceReference("#patient")},
+                    new Appointment.ParticipantComponent {Actor = new ResourceReference("#location")},
+                    new Appointment.ParticipantComponent {Actor = new ResourceReference("#healthcareService")}
                 }
             };
             return x;
